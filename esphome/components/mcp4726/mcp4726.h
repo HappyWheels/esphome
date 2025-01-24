@@ -4,7 +4,7 @@
 #include "esphome/core/component.h"
 #include "esphome/components/i2c/i2c.h"
 
-static const uint8_t mcp4726_ADDR = 0x96;
+static const uint8_t mcp4726_ADDR = 0x60;
 static const uint8_t mcp4726_RES = 12;
 
 namespace esphome {
