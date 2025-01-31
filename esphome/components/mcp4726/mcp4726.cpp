@@ -29,8 +29,8 @@ void mcp4726::dump_config() {
 // https://learn.sparkfun.com/tutorials/mcp4726-digital-to-analog-converter-hookup-guide?_ga=2.176055202.1402343014.1607953301-893095255.1606753886
 void mcp4726::write_state(float state) {
   const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
-  uint16_t output = (uint16_t) map((1024-value), 0, 1024, 2100, 3350);
-  uint16_t dac = 
+  uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
+  //uint16_t dac = 
 
   this->write_byte_16(64, ((output >> 4) | ((output & 15) << 4)));
 }
