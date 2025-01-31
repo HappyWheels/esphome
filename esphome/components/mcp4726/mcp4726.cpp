@@ -29,9 +29,33 @@ void mcp4726::dump_config() {
 // https://learn.sparkfun.com/tutorials/mcp4726-digital-to-analog-converter-hookup-guide?_ga=2.176055202.1402343014.1607953301-893095255.1606753886
 void mcp4726::write_state(float state) {
   const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
+  uint16_t output = (uint16_t) map((1024-value), 0, 1024, 2100, 3350);
+  uint16_t dac = 
 
-  this->write_byte_16(64, value >> 4 | (value & 15) << 4);
+  this->write_byte_16(64, ((output >> 4) | ((output & 15) << 4)));
 }
 
 }  // namespace mcp4726
 }  // namespace esphome
+
+/*  void write_state(float state) override {
+    //first check if the general output should be enables
+    if (state == 0.0) {
+        digitalWrite(16, 0);
+    }
+    else {
+        digitalWrite(16, 1);
+    }
+    // state is the amount this output should be on, from 0.0 to 1.0
+    // we need to convert it to an integer first
+    int value = state * 1024;
+    //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
+    uint16_t output = (uint16_t) map((1024-value), 0, 1024, 2100, 3350);
+  
+    Wire.beginTransmission(0x60); //address of DAC
+    Wire.write(0x40); //write data to DAC
+    Wire.write(output >> 4);                   // Upper data bits          (D11.D10.D9.D8.D7.D6.D5.D4)
+    Wire.write((output & 15) << 4);            // Lower data bits          (D3.D2.D1.D0.x.x.x.x)
+    Wire.endTransmission();
+
+  }*/
