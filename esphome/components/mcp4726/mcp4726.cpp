@@ -6,6 +6,7 @@ namespace mcp4726 {
 
 static const char *const TAG = "mcp4726";
 uint8_t DAC_REGISTER = 0x40;
+uint16_t dac = 0;
 
 
 void mcp4726::setup() {
@@ -30,8 +31,12 @@ void mcp4726::dump_config() {
 void mcp4726::write_state(float state) {
   const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
   uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
-  //uint16_t dac = 
-
+  
+  if(output!=dac){
+   // ESP_LOGE(TAG, (sprintf(str, "%u", output)));
+    ESP_LOGE(TAG, "  output: %s", output);
+  }
+dac = output;
   this->write_byte_16(64, ((output >> 4) | ((output & 15) << 4)));
 }
 
