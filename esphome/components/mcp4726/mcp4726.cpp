@@ -32,10 +32,11 @@ void mcp4726::dump_config() {
 void mcp4726::write_state(float state) {
  // const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
  // uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
+ const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
 
-  int value = state * 1024;
+  //int value = state * 1024;
     //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
-    uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
+    uint16_t output = (uint16_t) remap((4096-value), 0, 4096, 1000, 3350);
     this->write_byte_16(DAC4726_REG_INPUT, ((output << 4) | ((output & 15) << 4)));}
     
   
