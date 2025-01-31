@@ -5,9 +5,8 @@ namespace esphome {
 namespace mcp4726 {
 
 static const char *const TAG = "mcp4726";
-uint8_t DAC_REGISTER = 0x40;
+static const uint8_t DAC_REGISTER = 0x40;
 uint16_t dac = 0;
-static const uint8_t DAC4726_REG_INPUT = 0x40;
 
 
 void mcp4726::setup() {
@@ -37,32 +36,8 @@ void mcp4726::write_state(float state) {
   //int value = state * 1024;
     //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
     uint16_t output = (uint16_t) remap((4096-value), 0, 4096, 1000, 3350);
-    this->write_byte_16(DAC4726_REG_INPUT, ((output << 4) | ((output & 15) << 4)));}
+    this->write_byte_16(DAC_REGISTER, (output << 4));}
     
-  
-
 
 }  // namespace mcp4726
 }  // namespace esphome
-
-/*  void write_state(float state) override {
-    //first check if the general output should be enables
-    if (state == 0.0) {
-        digitalWrite(16, 0);
-    }
-    else {
-        digitalWrite(16, 1);
-    }
-    // state is the amount this output should be on, from 0.0 to 1.0
-    // we need to convert it to an integer first
-    int value = state * 1024;
-    //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
-    uint16_t output = (uint16_t) map((1024-value), 0, 1024, 2100, 3350);
-  
-    Wire.beginTransmission(0x60); //address of DAC
-    Wire.write(0x40); //write data to DAC
-    Wire.write(output >> 4);                   // Upper data bits          (D11.D10.D9.D8.D7.D6.D5.D4)
-    Wire.write((output & 15) << 4);            // Lower data bits          (D3.D2.D1.D0.x.x.x.x)
-    Wire.endTransmission();
-
-  }*/
