@@ -7,6 +7,7 @@ namespace mcp4726 {
 static const char *const TAG = "mcp4726";
 uint8_t DAC_REGISTER = 0x40;
 uint16_t dac = 0;
+static const uint8_t DAC4726_REG_INPUT = 0x40;
 
 
 void mcp4726::setup() {
@@ -29,16 +30,15 @@ void mcp4726::dump_config() {
 
 // https://learn.sparkfun.com/tutorials/mcp4726-digital-to-analog-converter-hookup-guide?_ga=2.176055202.1402343014.1607953301-893095255.1606753886
 void mcp4726::write_state(float state) {
-  const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
-  uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
+ // const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
+ // uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
+
+  int value = state * 1024;
+    //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
+    uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
+    this->write_byte_16(DAC4726_REG_INPUT, output << 4);
   
-  if(output!=dac){
-   // ESP_LOGE(TAG, (sprintf(str, "%u", output)));
-    ESP_LOGE(TAG, "  output: %s", output);
-  }
-dac = output;
-  this->write_byte_16(64, ((output >> 4) | ((output & 15) << 4)));
-}
+
 
 }  // namespace mcp4726
 }  // namespace esphome
