@@ -36,7 +36,7 @@ void mcp4726::write_state(float state) {
   //int value = state * 1024;
     //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
     uint16_t output = (uint16_t) remap((4096-value), 0, 4096, 1000, 3350);
-    this->write_byte_16(DAC_REGISTER, (output << 4));}
+    this->write_byte_16(DAC_REGISTER, ((output << 4) | ((output & 15) << 4)));}
     
 
 }  // namespace mcp4726
