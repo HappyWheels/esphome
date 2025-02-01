@@ -39,8 +39,9 @@ void mcp4726::write_state(float state) {
     int cmdv = (4096*state)/3.295;
 int cmdh = cmdv >> 8 ;
 int cmdl = cmdv - ( cmdh << 8 );
-this->write_byte(DAC_REGISTER, cmdh);
-this->write_byte(DAC_REGISTER, cmdl);
+this->write_byte(0x0, 0x40);
+this->write_byte(0x0, cmdh);
+this->write_byte(0x0, cmdl);
 
  //   this->write_byte_16(DAC_REGISTER, ((output << 4) | ((output & 15) << 4)));}
     
