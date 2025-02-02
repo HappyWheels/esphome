@@ -37,13 +37,32 @@ void mcp4726::write_state(float state) {
 
 //  uint16_t value = state * 4095;
   ESP_LOGD("value", "The vaue is: %d", value);
+   uint8_t array[3];  // Create 3-byte array
+   // uint16_t number = 0x0ABC;  // Example 12-bit number (0x0ABC = 2748 decimal)
+
+    buildArray(array, value);
+
+  
     //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
  //   uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
-    this->write_byte_16(DAC_REGISTER, value << 4);}
+ //   this->write_byte_16(DAC_REGISTER, value << 4);}
+    this->write(array, 3); }
  //  this->write_byte_16(DAC_REGISTER, ((value << 4) | ((value & 15) << 4)));}
    // this->write_byte_16(DAC_REGISTER, (value << 4));} 
 
  //   this->write_byte_16(DAC_REGISTER, ((output << 4) | ((output & 15) << 4)));}
+
+ // Function to create the array from a 12-bit number
+void buildArray(uint8_t* array, uint16_t number) {
+    // First byte is fixed 0x40
+    array[0] = 0x40;
+
+    // Extract high 8 bits for second byte (right shift by 4)
+    array[1] = (number >> 4) & 0xFF;
+
+    // Extract low 4 bits for third byte (mask with 0x0F and pad with zeros)
+    array[2] = (number & 0x0F);
+}
     
 
 }  // namespace mcp4726
