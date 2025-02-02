@@ -37,7 +37,7 @@ const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
  //   uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
   //  this->write_byte_16(DAC_REGISTER, output << 4);}
    // this->write_byte_16(DAC_REGISTER, ((value << 4) | ((value & 15) << 4)));}
-    this->write_byte_16(DAC_REGISTER, (value << 4))} 
+    this->write_byte_16(DAC_REGISTER, (value << 4));} 
 
  //   this->write_byte_16(DAC_REGISTER, ((output << 4) | ((output & 15) << 4)));}
     
