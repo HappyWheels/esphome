@@ -36,8 +36,8 @@ const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
     //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
  //   uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
   //  this->write_byte_16(DAC_REGISTER, output << 4);}
-   // this->write_byte_16(DAC_REGISTER, ((value << 4) | ((value & 15) << 4)));}
-    this->write_byte_16(DAC_REGISTER, (value << 4));} 
+   this->write_byte_16(DAC_REGISTER, ((value << 4) | ((value & 15) << 4)));}
+   // this->write_byte_16(DAC_REGISTER, (value << 4));} 
 
  //   this->write_byte_16(DAC_REGISTER, ((output << 4) | ((output & 15) << 4)));}
     
