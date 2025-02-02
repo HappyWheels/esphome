@@ -49,8 +49,9 @@ void mcp4726::write_state(float state) {
     array[1] = (value >> 4) & 0xFF;
 
     // Extract low 4 bits for third byte (mask with 0x0F and pad with zeros)
-    array[2] = (value & 0x0F);
+    array[2] = (value & 0x0F)<< 4;
     
+
   
     //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
  //   uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
