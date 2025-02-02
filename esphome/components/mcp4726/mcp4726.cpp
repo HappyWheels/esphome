@@ -32,7 +32,7 @@ void mcp4726::write_state(float state) {
 //ESP_LOGD("state", "The dim vaue is: %f", value);
  // uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
  //const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
-
+ESP_LOGD("state", "The dim vaue is: %f", state);
   uint16_t value = state * 4095;
   ESP_LOGD("state", "The dim vaue is: %f", value);
     //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
