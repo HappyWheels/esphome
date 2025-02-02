@@ -25,7 +25,16 @@ void mcp4726::dump_config() {
     ESP_LOGE(TAG, "Communication with mcp4726 failed!");
   }
 }
+void buildArray(uint8_t* array, uint16_t number) {
+    // First byte is fixed 0x40
+    array[0] = 0x40;
 
+    // Extract high 8 bits for second byte (right shift by 4)
+    array[1] = (number >> 4) & 0xFF;
+
+    // Extract low 4 bits for third byte (mask with 0x0F and pad with zeros)
+    array[2] = (number & 0x0F);
+}
 // https://learn.sparkfun.com/tutorials/mcp4726-digital-to-analog-converter-hookup-guide?_ga=2.176055202.1402343014.1607953301-893095255.1606753886
 void mcp4726::write_state(float state) {
   ESP_LOGD("state", "The state is: %.5f", state);
@@ -53,16 +62,7 @@ void mcp4726::write_state(float state) {
  //   this->write_byte_16(DAC_REGISTER, ((output << 4) | ((output & 15) << 4)));}
 
  // Function to create the array from a 12-bit number
-void buildArray(uint8_t* array, uint16_t number) {
-    // First byte is fixed 0x40
-    array[0] = 0x40;
 
-    // Extract high 8 bits for second byte (right shift by 4)
-    array[1] = (number >> 4) & 0xFF;
-
-    // Extract low 4 bits for third byte (mask with 0x0F and pad with zeros)
-    array[2] = (number & 0x0F);
-}
     
 
 }  // namespace mcp4726
