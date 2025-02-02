@@ -28,13 +28,15 @@ void mcp4726::dump_config() {
 
 // https://learn.sparkfun.com/tutorials/mcp4726-digital-to-analog-converter-hookup-guide?_ga=2.176055202.1402343014.1607953301-893095255.1606753886
 void mcp4726::write_state(float state) {
+  ESP_LOGD("state", "The dim vaue is: %.5f", state);
 //const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
 //ESP_LOGD("state", "The dim vaue is: %f", value);
  // uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
- //const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
-ESP_LOGD("state", "The dim vaue is: %f", state);
-  uint16_t value = state * 4095;
-  ESP_LOGD("state", "The dim vaue is: %f", value);
+// const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
+ const uint16_t value = (uint16_t) round(state * 4095);
+
+//  uint16_t value = state * 4095;
+  ESP_LOGD("state", "The dim vaue is: %7f", value);
     //Map to 2100-3350, values by trial and error, may depend on used light. I am using LEDs. 
  //   uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
     this->write_byte_16(DAC_REGISTER, value << 4);}
