@@ -35,7 +35,7 @@ void mcp4726::write_state(float state) {
 //ESP_LOGD("state", "The dim vaue is: %f", value);
  // uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
 // const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
- const uint16_t value = (uint16_t) round(state * 4095);
+ uint16_t value = (uint16_t) round(state * 4095);
  Wire.beginTransmission(mcp4726_ADDR); //address of DAC
     Wire.write(0x40); //write data to DAC
    // Wire.write(value >> 4);                   // Upper data bits          (D11.D10.D9.D8.D7.D6.D5.D4)
