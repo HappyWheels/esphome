@@ -38,8 +38,10 @@ void mcp4726::write_state(float state) {
  const uint16_t value = (uint16_t) round(state * 4095);
  Wire.beginTransmission(mcp4726_ADDR); //address of DAC
     Wire.write(0x40); //write data to DAC
-    Wire.write(value >> 4);                   // Upper data bits          (D11.D10.D9.D8.D7.D6.D5.D4)
-    Wire.write((value & 15) << 4);            // Lower data bits          (D3.D2.D1.D0.x.x.x.x)
+   // Wire.write(value >> 4);                   // Upper data bits          (D11.D10.D9.D8.D7.D6.D5.D4)
+    //Wire.write((value & 15) << 4);            // Lower data bits          (D3.D2.D1.D0.x.x.x.x)
+     Wire.write((uint8_t) ((value >> 8) & 0x0F));   // MSB: (D11, D10, D9, D8) 
+  Wire.write((uint8_t) (value));  // LSB: (D7, D6, D5, D4, D3, D2, D1, D0)
     Wire.endTransmission();}
 
  //constexpr uint8_t ADDR_REGISTER_1 = 0x40;
