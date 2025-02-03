@@ -11,12 +11,13 @@ static const uint8_t DAC_REGISTER = 0x40;
 
 void mcp4726::setup() {
   ESP_LOGCONFIG(TAG, "Setting up mcp4726 (0x%02X)...", this->address_);
-  auto err = this->write(nullptr, 0);
-  if (err != i2c::ERROR_OK) {
-    this->error_code_ = COMMUNICATION_FAILED;
-    this->mark_failed();
-    return;
-  }
+ Wire.begin();
+ // auto err = this->write(nullptr, 0);
+  //if (err != i2c::ERROR_OK) {
+  //  this->error_code_ = COMMUNICATION_FAILED;
+   // this->mark_failed();
+ //   return;
+ // }
 }
 
 void mcp4726::dump_config() {
@@ -35,22 +36,27 @@ void mcp4726::write_state(float state) {
  // uint16_t output = (uint16_t) remap((1024-value), 0, 1024, 2100, 3350);
 // const uint16_t value = (uint16_t) round(state * (pow(2, mcp4726_RES) - 1));
  const uint16_t value = (uint16_t) round(state * 4095);
+ Wire.beginTransmission(mcp4726_ADDR); //address of DAC
+    Wire.write(0x40); //write data to DAC
+    Wire.write(value >> 4);                   // Upper data bits          (D11.D10.D9.D8.D7.D6.D5.D4)
+    Wire.write((value & 15) << 4);            // Lower data bits          (D3.D2.D1.D0.x.x.x.x)
+    Wire.endTransmission();}
 
- constexpr uint8_t ADDR_REGISTER_1 = 0x40;
-i2c::I2CRegister reg_1 = this->reg(ADDR_REGISTER_1); // declare
+ //constexpr uint8_t ADDR_REGISTER_1 = 0x40;
+//i2c::I2CRegister reg_1 = this->reg(ADDR_REGISTER_1); // declare
 
 //  uint16_t value = state * 4095;
   // ESP_LOGD("value", "The vaue is: %d", value);
  
    // uint16_t number = 0x0ABC;  // Example 12-bit number (0x0ABC = 2748 decimal)
 // First byte is fixed 0x40
-    array[0] = 0x40;
+ //   array[0] = 0x40;
 
     // Extract high 8 bits for second byte (right shift by 4)
-    array[1] = (value >> 4) & 0xFF;
+   // array[1] = (value >> 4) & 0xFF;
 
     // Extract low 4 bits for third byte (mask with 0x0F and pad with zeros)
-    array[2] = (value & 0x0F)<< 4;
+    //array[2] = (value & 0x0F)<< 4;
     
 
   
@@ -61,7 +67,7 @@ i2c::I2CRegister reg_1 = this->reg(ADDR_REGISTER_1); // declare
   //  this->write_byte(0x0, array[0]);
 
  //  this->write_byte_16(DAC_REGISTER, ((value << 4) | ((value & 15) << 4)));}
-    this->write_byte_16(DAC_REGISTER, (value << 4));} 
+   // this->write_byte_16(DAC_REGISTER, (value << 4));} 
 
  //   this->write_byte_16(DAC_REGISTER, ((output << 4) | ((output & 15) << 4)));}
 
